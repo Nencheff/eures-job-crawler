@@ -1,6 +1,6 @@
 {
   "name": "eures-job-crawler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fast TypeScript CLI for extracting and normalizing EURES job listings using the same JSON endpoints as the EURES web application.",
   "license": "MIT",
   "repository": {
