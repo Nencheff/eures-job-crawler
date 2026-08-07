@@ -1,0 +1,26 @@
+node_modules/
+dist/
+coverage/
+
+output/*
+!output/.gitkeep
+
+.env
+.env.*
+!.env.example
+
+.claude/
+.vscode/
+
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor-specific
+*.swp
+*.swo
+*~
+.idea/

@@ -1,0 +1,34 @@
+{
+  "name": "eures-job-crawler",
+  "version": "0.1.0",
+  "description": "Command-line crawler that extracts EURES job offers into normalized JSON for later analysis.",
+  "license": "MIT",
+  "keywords": [
+    "eures",
+    "jobs",
+    "crawler",
+    "job-search",
+    "scraper",
+    "cli"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "crawl": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "@types/node": "^22.5.0",
+    "eslint": "^9.9.0",
+    "prettier": "^3.3.3",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.1.0"
+  }
+}
