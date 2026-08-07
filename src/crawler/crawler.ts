@@ -1,6 +1,10 @@
 import { fetchJobDetail, fetchReferenceDictionary, searchJobs } from "../api/euresClient.js";
 import { createReferenceData } from "../api/referenceData.js";
-import type { EuresDetailResponse, EuresSearchJv } from "../api/euresTypes.js";
+import type {
+  EuresDetailResponse,
+  EuresRequiredLanguage,
+  EuresSearchJv,
+} from "../api/euresTypes.js";
 import type { CrawlMetadata } from "../models/CrawlMetadata.js";
 import type { Job } from "../models/Job.js";
 import { logger, ProgressTracker } from "../utils/logger.js";
@@ -16,6 +20,7 @@ export interface CrawlOptions {
   resultsPerPage: number;
   concurrency: number;
   relevanceFilter: RelevanceFilterOptions;
+  requiredLanguages: EuresRequiredLanguage[];
 }
 
 export interface CrawlResult {
@@ -46,6 +51,7 @@ const collectSearchPages = async (
         keyword: options.keyword,
         page,
         resultsPerPage: options.resultsPerPage,
+        requiredLanguages: options.requiredLanguages,
       });
       return response.jvs;
     } catch (error) {
@@ -70,6 +76,7 @@ export const crawlEuresJobs = async (options: CrawlOptions): Promise<CrawlResult
       keyword: options.keyword,
       page: options.pageStart,
       resultsPerPage: options.resultsPerPage,
+      requiredLanguages: options.requiredLanguages,
     }),
   ]);
   const reference = createReferenceData(referenceDictionary);

@@ -8,6 +8,7 @@ import { HttpError } from "../utils/httpError.js";
 import { withRetry } from "../utils/retry.js";
 import type {
   EuresDetailResponse,
+  EuresRequiredLanguage,
   EuresSearchRequest,
   EuresSearchResponse,
   ReferenceDictionary,
@@ -32,12 +33,14 @@ export interface SearchPageInput {
   keyword: string;
   page: number;
   resultsPerPage: number;
+  requiredLanguages?: EuresRequiredLanguage[];
 }
 
 export const searchJobs = async ({
   keyword,
   page,
   resultsPerPage,
+  requiredLanguages = [],
 }: SearchPageInput): Promise<EuresSearchResponse> => {
   const body: EuresSearchRequest = {
     resultsPerPage,
@@ -55,7 +58,7 @@ export const searchJobs = async ({
     locationCodes: [],
     euresFlagCodes: [],
     otherBenefitsCodes: [],
-    requiredLanguages: [],
+    requiredLanguages,
     minNumberPost: null,
     userPreferredLanguage: null,
     requestLanguage: "en",

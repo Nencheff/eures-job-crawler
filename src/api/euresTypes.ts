@@ -38,6 +38,12 @@ export interface EuresSearchResponse {
   jvs: EuresSearchJv[];
 }
 
+/** ISO 639 language code paired with the highest CEFR level the search should match. */
+export interface EuresRequiredLanguage {
+  isoCode: string;
+  level: string;
+}
+
 export interface EuresSearchRequest {
   resultsPerPage: number;
   page: number;
@@ -54,7 +60,7 @@ export interface EuresSearchRequest {
   locationCodes: string[];
   euresFlagCodes: string[];
   otherBenefitsCodes: string[];
-  requiredLanguages: string[];
+  requiredLanguages: EuresRequiredLanguage[];
   minNumberPost: null;
   userPreferredLanguage: null;
   requestLanguage: string;

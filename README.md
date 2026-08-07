@@ -43,6 +43,11 @@ Arguments:
 - `--exclude`: comma-separated, case-insensitive terms checked against each job title before
   its detail page is fetched (only used when `--skip-irrelevant` is set), e.g.
   `--exclude "java backend,sap consultant,nurse"`
+- `--language`: comma-separated `isoCode[:CEFR level]` pairs, filtered natively by the EURES
+  search API (no local post-processing). Multiple languages are combined with OR. A level of
+  `C2` (the most inclusive) is assumed when omitted, and a level filters for jobs requiring
+  that proficiency or lower, e.g. `--language en` (any English requirement), `--language en:B1`
+  (English at B1 or below), or `--language en:B1,de:B1` (English or German, B1 or below)
 
 More examples:
 
@@ -50,6 +55,8 @@ More examples:
 npm run crawl -- --keyword react --page-end 2 --results 25
 npm run crawl -- --keyword "software engineer" --results 50 --concurrency 10
 npm run crawl -- --keyword frontend --skip-irrelevant --exclude "java backend,plc engineer,nurse"
+npm run crawl -- --keyword frontend --language en
+npm run crawl -- --keyword react --language en:B1,de:B1
 ```
 
 ## Output

@@ -5,14 +5,46 @@ import {
   DEFAULT_PAGE_START,
   DEFAULT_RESULTS_PER_PAGE,
 } from "./config.js";
+import type { EuresRequiredLanguage } from "./api/euresTypes.js";
 import { crawlEuresJobs, type CrawlOptions } from "./crawler/crawler.js";
 import { logger } from "./utils/logger.js";
 import { saveCrawlMetadata, saveNormalizedJobs, saveRawJobs } from "./utils/saveJson.js";
+
+const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
+
+/** Most inclusive CEFR level: matches jobs requiring this proficiency or lower. */
+const DEFAULT_LANGUAGE_LEVEL = "C2";
 
 const parsePositiveInteger = (value: string | undefined, fallback: number): number => {
   if (!value) return fallback;
   const parsed = Number.parseInt(value, 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+};
+
+const parseRequiredLanguages = (value: string | undefined): EuresRequiredLanguage[] => {
+  if (!value) return [];
+
+  return value
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter((entry) => entry.length > 0)
+    .map((entry) => {
+      const [isoCodeRaw, levelRaw] = entry.split(":");
+      const isoCode = isoCodeRaw?.trim().toLowerCase();
+      const level = (levelRaw?.trim() || DEFAULT_LANGUAGE_LEVEL).toUpperCase();
+
+      if (!isoCode) {
+        throw new Error(`Invalid --language entry "${entry}": missing language code`);
+      }
+      if (!CEFR_LEVELS.includes(level)) {
+        throw new Error(
+          `Invalid CEFR level "${level}" for language "${isoCode}" in --language. ` +
+            `Must be one of: ${CEFR_LEVELS.join(", ")}`,
+        );
+      }
+
+      return { isoCode, level };
+    });
 };
 
 const parseArgs = (argv: string[]): CrawlOptions => {
@@ -56,6 +88,8 @@ const parseArgs = (argv: string[]): CrawlOptions => {
     );
   }
 
+  const requiredLanguages = parseRequiredLanguages(args.get("language"));
+
   return {
     keyword,
     pageStart,
@@ -63,15 +97,20 @@ const parseArgs = (argv: string[]): CrawlOptions => {
     resultsPerPage,
     concurrency,
     relevanceFilter: { enabled: skipIrrelevant, excludeTerms },
+    requiredLanguages,
   };
 };
 
 const main = async (): Promise<void> => {
   const options = parseArgs(process.argv.slice(2));
+  const languagesLabel = options.requiredLanguages.length
+    ? options.requiredLanguages.map(({ isoCode, level }) => `${isoCode}:${level}`).join(",")
+    : "any";
   logger.info(
     `Starting EURES crawl: keyword="${options.keyword}", ` +
       `pages=${options.pageStart}-${options.pageEnd ?? "last"}, ` +
-      `results=${options.resultsPerPage}, concurrency=${options.concurrency}`,
+      `results=${options.resultsPerPage}, concurrency=${options.concurrency}, ` +
+      `languages=${languagesLabel}`,
   );
 
   const { rawJobs, normalizedJobs, metadata } = await crawlEuresJobs(options);
