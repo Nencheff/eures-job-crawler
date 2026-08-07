@@ -26,7 +26,7 @@ npm install
 ## Run
 
 ```bash
-npm run crawl -- --keyword frontend --results 50
+npx tsx src/cli.ts --keyword frontend --results 50
 ```
 
 By default the crawler paginates until it has covered every available result. Pass
@@ -52,12 +52,19 @@ Arguments:
 More examples:
 
 ```bash
-npm run crawl -- --keyword react --page-end 2 --results 25
-npm run crawl -- --keyword "software engineer" --results 50 --concurrency 10
-npm run crawl -- --keyword frontend --skip-irrelevant --exclude "java backend,plc engineer,nurse"
-npm run crawl -- --keyword frontend --language en
-npm run crawl -- --keyword react --language en:B1,de:B1
+npx tsx src/cli.ts --keyword react --page-end 2 --results 25
+npx tsx src/cli.ts --keyword "software engineer" --results 50 --concurrency 10
+npx tsx src/cli.ts --keyword frontend --skip-irrelevant --exclude "java backend,plc engineer,nurse"
+npx tsx src/cli.ts --keyword frontend --language en
+npx tsx src/cli.ts --keyword react --language en:B1,de:B1
 ```
+
+## Known Issues
+
+`npm run crawl -- ...` can silently drop arguments on Windows PowerShell — a long-standing npm
+bug ([npm/cli#7440](https://github.com/npm/cli/issues/7440)), not a bug in this project; the CLI
+itself parses arguments correctly. Command Prompt, Git Bash, Linux, and macOS are unaffected. The
+`npx tsx src/cli.ts ...` form used throughout this README works reliably everywhere.
 
 ## Output
 
