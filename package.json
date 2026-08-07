@@ -1,15 +1,25 @@
 {
   "name": "eures-job-crawler",
-  "version": "0.1.0",
-  "description": "Command-line crawler that extracts EURES job offers into normalized JSON for later analysis.",
+  "version": "1.0.0",
+  "description": "Fast TypeScript CLI for extracting and normalizing EURES job listings using the same JSON endpoints as the EURES web application.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nencheff/eures-job-crawler.git"
+  },
+  "homepage": "https://github.com/Nencheff/eures-job-crawler",
+  "bugs": {
+    "url": "https://github.com/Nencheff/eures-job-crawler/issues"
+  },
   "keywords": [
     "eures",
     "jobs",
     "crawler",
+    "typescript",
+    "cli",
+    "http",
     "job-search",
-    "scraper",
-    "cli"
+    "europe"
   ],
   "engines": {
     "node": ">=18"
